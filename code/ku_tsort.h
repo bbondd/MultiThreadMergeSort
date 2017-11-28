@@ -1,11 +1,8 @@
-typedef struct _StartAndEnd {
-    int start, end;
-}StartAndEnd;
+typedef struct _StartAndEnd { int start, end; }StartAndEnd;
 
-int* readDataFromFile(char* fileName);
-void initialize(char* argv[]);
+void readDataFromFile(char* fileName);
 void mergeData(int start,int middle, int end);
 void recursiveMergeSort(int start, int end);
 void threadMergeSort(StartAndEnd* startAndEnd);
-void multiThreadMergeSort();
+void multiThreadMergeSort(int threadNumber);
 void writeDataToFile(char* fileName);
