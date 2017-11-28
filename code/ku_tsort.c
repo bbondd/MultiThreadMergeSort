@@ -44,7 +44,7 @@ void threadMergeSort(StartAndEnd* startAndEnd) { recursiveMergeSort(startAndEnd-
 
 void multiThreadMergeSort(int threadNumber) {        
     pthread_t* thread = (pthread_t*)calloc(threadNumber, sizeof(pthread_t));
-    StartAndEnd* startAndEnd = (StartAndEnd*)malloc(threadNumber * sizeof(StartAndEnd));
+    StartAndEnd* startAndEnd = (StartAndEnd*)calloc(threadNumber, sizeof(StartAndEnd));
 
     for(int i = 0; i < threadNumber; i++) {
         startAndEnd[i].start = dataLength * i / threadNumber;
