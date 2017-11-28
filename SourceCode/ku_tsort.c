@@ -15,33 +15,19 @@ void readDataFromFile(char* fileName) {
     data = fileData;
 }
 
-void mergeData(int start,int middle, int end) {
-    int arraySize = end - start;
-    int left = start; int right = middle;
-    int* tempArray = (int*)calloc(arraySize, sizeof(int));
+void merge(int start, int middle, int end) {
+    int i = 0, left = start, right = middle;
+    int* tempArray = (int*)calloc(end - start, sizeof(int));
 
-    for(int i = 0; i < arraySize; i++)
-    {
-        if(data[left] < data[right] && left < middle && right < end) {
-            tempArray[i] = data[left];    
-            left++;
-        }
-        else if(data[right] <= data[left] && left < middle && right < end){
-            tempArray[i] = data[right];
-            right++;
-        }
-        else if(left == middle && right < end){
-            tempArray[i] = data[right];
-            right++;
-        }
-        else if(left < middle && right == end){
-            tempArray[i] = data[left];
-            left++;
-        }
-        else printf("function mergeData error");
+    while(left < middle && right < end) {
+        if(data[left] < data[right]) tempArray[i++] = data[left++];
+        else tempArray[i++] = data[right++];
     }
 
-    for(int i = 0; i < arraySize; i++) data[start + i] = tempArray[i];
+    while(left < middle) tempArray[i++] = data[left++];
+    while(right < end) tempArray[i++] = data[right++];
+
+    for(int j = 0; j < end - start; j++) data[start + j] = tempArray[j];
     
     free(tempArray);
 }
@@ -53,7 +39,7 @@ void recursiveMergeSort(int start, int end) {
     recursiveMergeSort(start, middle);
     recursiveMergeSort(middle, end);
 
-    mergeData(start, middle, end);
+    merge(start, middle, end);
 }
 
 void threadMergeSort(StartAndEnd* startAndEnd) { recursiveMergeSort(startAndEnd->start, startAndEnd->end); }
@@ -69,7 +55,7 @@ void multiThreadMergeSort(int threadNumber) {
     }
 
     for(int i = 0; i < threadNumber; i++) pthread_join(thread[i], NULL);
-    for(int i = 0; i < threadNumber; i++) mergeData(0, dataLength * i / threadNumber, dataLength * (i + 1) / threadNumber);
+    for(int i = 0; i < threadNumber; i++) merge(0, dataLength * i / threadNumber, dataLength * (i + 1) / threadNumber);
 }
 
 void writeDataToFile(char* fileName) {
