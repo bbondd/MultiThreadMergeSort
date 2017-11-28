@@ -1,6 +1,4 @@
-typedef struct _StartAndEnd {
-    int start, end;
-}StartAndEnd;
+typedef struct _StartAndEnd { int start, end; }StartAndEnd;
 
 void readDataFromFile(char* fileName);
 void mergeData(int start,int middle, int end);
