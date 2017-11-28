@@ -6,30 +6,16 @@
 int dataLength;
 int* data;
 
-int threadNumber;
-pthread_t* thread;
-
-int* readDataFromFile(char* fileName)
-{
+void readDataFromFile(char* fileName) {
 	FILE* inputFile = fopen(fileName, "r");
 	int* fileData = (int*)calloc(dataLength, sizeof(int));
 	for(int i = 0; i < dataLength; i++) fscanf(inputFile, "%d", &fileData[i]);
 	fclose(inputFile);
 	
-	return fileData;
+    data = fileData;
 }
 
-void initialize(char* argv[])
-{
-	dataLength = atoi(argv[1]);
-	data = readDataFromFile(argv[3]);
-	
-    threadNumber = atoi(argv[2]);
-    thread = (pthread_t*)calloc(threadNumber, sizeof(pthread_t));
-}
-
-void mergeData(int start,int middle, int end)
-{
+void mergeData(int start,int middle, int end) {
     int arraySize = end - start;
     int left = start; int right = middle;
     int* tempArray = (int*)calloc(arraySize, sizeof(int));
@@ -60,8 +46,7 @@ void mergeData(int start,int middle, int end)
     free(tempArray);
 }
 
-void recursiveMergeSort(int start, int end)
-{
+void recursiveMergeSort(int start, int end) {
     if (start + 1 == end) return;
 
     int middle = (start + end) / 2;
@@ -73,8 +58,8 @@ void recursiveMergeSort(int start, int end)
 
 void threadMergeSort(StartAndEnd* startAndEnd) { recursiveMergeSort(startAndEnd->start, startAndEnd->end); }
 
-void multiThreadMergeSort()
-{
+void multiThreadMergeSort(int threadNumber) {        
+    pthread_t* thread = (pthread_t*)calloc(threadNumber, sizeof(pthread_t));
     StartAndEnd* startAndEnd = (StartAndEnd*)malloc(threadNumber * sizeof(StartAndEnd));
 
     for(int i = 0; i < threadNumber; i++) {
@@ -93,8 +78,9 @@ void writeDataToFile(char* fileName) {
     fclose(outputFile);
 }
 
-int main(int argc, char* argv[]) {
-	initialize(argv);
-    multiThreadMergeSort();
+void main(int argc, char* argv[]) {
+    dataLength = atoi(argv[1]);
+    readDataFromFile(argv[3]);
+    multiThreadMergeSort(atoi(argv[2]));
     writeDataToFile(argv[4]);
 }
