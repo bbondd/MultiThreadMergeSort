@@ -21,7 +21,6 @@ void writeDataToFile(char* fileName) {
     fclose(outputFile);
 }
 
-
 void merge(int start, int middle, int end) {
     int i = 0, left = start, right = middle;
     int* tempArray = (int*)calloc(end - start, sizeof(int));
@@ -62,7 +61,6 @@ void multiThreadMergeSort(int threadNumber) {
     for(int i = 0; i < threadNumber; i++) pthread_join(thread[i], NULL);
     for(int i = 0; i < threadNumber; i++) merge(0, dataLength * i / threadNumber, dataLength * (i + 1) / threadNumber);
 }
-
 
 void main(int argc, char* argv[]) {
     dataLength = atoi(argv[1]);
